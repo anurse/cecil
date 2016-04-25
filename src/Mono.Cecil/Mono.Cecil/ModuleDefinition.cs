@@ -163,7 +163,14 @@ namespace Mono.Cecil {
 #if !PCL
 			return typeof (object).Assembly.ImageRuntimeVersion.ParseRuntime ();
 #else
-			var corlib_name = AssemblyNameReference.Parse (typeof (object).Assembly.FullName);
+
+#if NETSTANDARD1_3
+			var corlib = SR.IntrospectionExtensions.GetTypeInfo(typeof (object)).Assembly;
+#else
+			var corlib = typeof (object).Assembly;
+#endif
+			
+			var corlib_name = AssemblyNameReference.Parse (corlib.FullName);
 			var corlib_version = corlib_name.Version;
 			switch (corlib_version.Major) {
 			case 1:

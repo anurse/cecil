@@ -24,6 +24,10 @@ using CodedRID = System.UInt32;
 using StringIndex = System.UInt32;
 using BlobIndex = System.UInt32;
 
+#if NETSTANDARD1_3
+using Mono.Cecil.Internal;
+#endif
+
 namespace Mono.Cecil {
 
 #if !READ_ONLY
@@ -1677,7 +1681,13 @@ namespace Mono.Cecil {
 
 		static ElementType GetConstantType (Type type)
 		{
-			switch (Type.GetTypeCode (type)) {
+#if NETSTANDARD1_3
+			var typeCode = type.GetTypeCode();
+#else
+			var typeCode = Type.GetTypeCode(type);
+#endif
+			
+			switch (typeCode) {
 			case TypeCode.Boolean:
 				return ElementType.Boolean;
 			case TypeCode.Byte:
@@ -2321,7 +2331,13 @@ namespace Mono.Cecil {
 			if (value == null)
 				throw new ArgumentNullException ();
 
-			switch (Type.GetTypeCode (value.GetType ())) {
+#if NETSTANDARD1_3
+			var typeCode = value.GetType().GetTypeCode();
+#else
+			var typeCode = Type.GetTypeCode(value.GetType());
+#endif
+
+			switch (typeCode) {
 			case TypeCode.Boolean:
 				WriteByte ((byte) (((bool) value) ? 1 : 0));
 				break;
