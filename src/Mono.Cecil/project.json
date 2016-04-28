@@ -24,8 +24,8 @@
                 ]
             },
             "frameworkAssemblies": {
-                "System.Runtime": {},
-                "System.IO": {}
+                "mscorlib": { },
+                "System.Core": { }
             }
         },
         "netstandard1.3": {
